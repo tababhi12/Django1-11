@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'snip/css.html' %}
+    <meta charset="UTF-8">
+    <title>{% block head_title %} Muypicky {% endblock head_title %}</title>
+</head>
+
+<body>
+{% include 'snip/nav.html'%}
+<div class ='container'>
+{% block content %}
+Hello There!
+{% endblock content %}
+    </div>
+{% include 'snip/js.html' %}
+</body>
+</html>

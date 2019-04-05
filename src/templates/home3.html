@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>This is home page 3</h1>
+<p>This is html {{ html_var }} coming through </p>
+{% if html_var %}
+    <p>Random number is {{num}}</p>
+{% endif%}
+{% for some_item in some_list%}
+    {% if some_item|divisibleby:'2' %}
+        Even Number
+    {% endif%}
+{{ some_item }}<br/>
+{% endfor %}
+{% endblock content%}
