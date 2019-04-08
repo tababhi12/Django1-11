@@ -1,28 +1,29 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.http import HttpResponse
 import random
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+from .models import RestuarantLocation
+
 
 # Create your views here.
-class HomeView(TemplateView):
-    template_name = 'home.html'
-    #context = super(HomeView, self).get_context_Data(*args,**kwargs)
-    def get_context_data(self,*args,**kwargs):
-        some_list = [
-            random.randint(0, 10000),
-            random.randint(0, 10000),
-            random.randint(0, 10000)
-        ]
-        conditional_bool_item = True
-        if conditional_bool_item:
-            num = random.randint(0, 10000)
-        context = {'html_var': 'HTML', 'num': num, 'some_list': some_list}
-        return context
+
+def restuarant_list(request):
+    queryset = RestuarantLocation.objects.all()
+    return render(request, template_name='restuarants/restuarants_list.html', context={'object_list': queryset})
 
 
-class AboutView(TemplateView):
-    template_name = 'about.html'
+class RestuarantListView(ListView):
+    template_name = 'restuarants/restuarants_list.html'
+    def get_queryset(self):
+        print(self.kwargs)
+        slug = self.kwargs.get("slug")
+        if slug:
+            queryset = RestuarantLocation.objects.filter(Q(category__icontains=slug)| Q(category__iexact=slug))
+        else:
+            queryset = RestuarantLocation.objects.all()
+        return queryset
 
 
 

@@ -16,13 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-from restuarants.views import HomeView,AboutView
+#from restuarants.views import HomeView,AboutView
 from django.views.generic import TemplateView
+from restuarants.views import restuarant_list,RestuarantListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^$', HomeView.as_view()),
-    url('^about/$', AboutView.as_view()),
-    #url('^contact/(?P<id>\d+)/$', ContactView.as_view()),
+    url('^$', TemplateView.as_view(template_name = 'home.html')),
+    url('^about/$', TemplateView.as_view(template_name = 'about.html')),
+    url('^restuarants/$', RestuarantListView.as_view()),
+    url('^restuarants/(?P<slug>\w+)/$', RestuarantListView.as_view()),
+    #url('^restuarants/gastropub/$', GastropubListView.as_view()),
     url('^contact/$', TemplateView.as_view(template_name = 'contact.html')),
 ]
