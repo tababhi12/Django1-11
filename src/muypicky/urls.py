@@ -18,14 +18,16 @@ from django.urls import path
 from django.conf.urls import url
 #from restuarants.views import HomeView,AboutView
 from django.views.generic import TemplateView
-from restuarants.views import restuarant_list,RestuarantListView
+from restuarants.views import restuarant_list,RestuarantListView,RestuarantDetailView,restuarant_createview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('^$', TemplateView.as_view(template_name = 'home.html')),
     url('^about/$', TemplateView.as_view(template_name = 'about.html')),
     url('^restuarants/$', RestuarantListView.as_view()),
-    url('^restuarants/(?P<slug>\w+)/$', RestuarantListView.as_view()),
+    url('^restuarants/create/$', restuarant_createview),
+    url('^restuarants/(?P<slug>[\w-]+)/$', RestuarantDetailView.as_view()),
+    #url('^restuarants/(?P<rest_id>\w+)/$', RestuarantDetailView.as_view()),
     #url('^restuarants/gastropub/$', GastropubListView.as_view()),
     url('^contact/$', TemplateView.as_view(template_name = 'contact.html')),
 ]

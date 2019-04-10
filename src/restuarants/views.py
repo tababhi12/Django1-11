@@ -1,13 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 import random
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView,DetailView
 from .models import RestuarantLocation
+from .forms import RestuarantCreateForm
 
 
 # Create your views here.
+
+def restuarant_createview(request):
+    print(request.GET)
+    if request.method == 'GET':
+        print('GET DATA')
+    if request.method == 'POST':
+        print('POST DATA')
+        # title = request.POST.get('title')
+        # location = request.POST.get('location')
+        # category = request.POST.get('category')
+        # obj = RestuarantLocation.objects.create(
+        #     name = title,
+        #     location = location,
+        #     category = category
+        # )
+        # return HttpResponseRedirect('/restuarants/')
+    return render(request, template_name='restuarants/form.html', context={})
 
 def restuarant_list(request):
     queryset = RestuarantLocation.objects.all()
@@ -25,5 +43,12 @@ class RestuarantListView(ListView):
             queryset = RestuarantLocation.objects.all()
         return queryset
 
+class RestuarantDetailView(DetailView):
+    queryset = RestuarantLocation.objects.all()#filter(category__iexact = 'gastropub')
+
+    # def get_object(self, queryset=None):
+    #     rest_id = self.kwargs.get('rest_id')
+    #     obj = get_object_or_404(RestuarantLocation,id = rest_id) #pk = rest_id
+    #     return obj
 
 
