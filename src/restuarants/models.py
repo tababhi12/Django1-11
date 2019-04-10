@@ -2,13 +2,14 @@ from django.db import models
 from django.db.models.signals import pre_save,post_save
 import datetime as dt
 from .utils import unique_slug_generator
+from .validators import validate_category
 
 # Create your models here.
 
 class RestuarantLocation(models.Model):
     name = models.TextField(max_length=120)
     location = models.TextField(max_length=120,null = True,blank=True)
-    category = models.CharField(max_length=120,null=True,blank=False)
+    category = models.CharField(max_length=120,null=True,blank=False,validators = [validate_category])
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now = True)
     slug = models.SlugField(null=True,blank=True)
@@ -22,6 +23,7 @@ class RestuarantLocation(models.Model):
 
 def rl_pre_save_receiver(sender,instance,*args,**kwargs):
     print('saving..')
+    instance.category = instance.category.capitalize()
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
     print(instance.timestamp)
