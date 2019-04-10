@@ -11,21 +11,26 @@ from .forms import RestuarantCreateForm
 # Create your views here.
 
 def restuarant_createview(request):
-    print(request.GET)
-    if request.method == 'GET':
-        print('GET DATA')
+    # print(request.GET)
+    # if request.method == 'GET':
+    #     print('GET DATA')
+    form = RestuarantCreateForm()
     if request.method == 'POST':
-        print('POST DATA')
+        # print('POST DATA')
         # title = request.POST.get('title')
         # location = request.POST.get('location')
         # category = request.POST.get('category')
-        # obj = RestuarantLocation.objects.create(
-        #     name = title,
-        #     location = location,
-        #     category = category
-        # )
-        # return HttpResponseRedirect('/restuarants/')
-    return render(request, template_name='restuarants/form.html', context={})
+        form = RestuarantCreateForm(request.POST)
+        if form.is_valid():
+            obj = RestuarantLocation.objects.create(
+                name = form.cleaned_data.get('name'),
+                location = form.cleaned_data.get('location'),
+                category = form.cleaned_data.get('category')
+            )
+            return HttpResponseRedirect('/restuarants/')
+        if form.errors:
+            print(form.errors)
+    return render(request, template_name='restuarants/form.html', context={'forms':form})
 
 def restuarant_list(request):
     queryset = RestuarantLocation.objects.all()
