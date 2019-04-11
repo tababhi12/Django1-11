@@ -46,6 +46,12 @@ class RestuarantDetailView(DetailView):
 
 class RestuarantCreateView(CreateView):
     form_class = RestuarantLocationCreateForm
-    template_name = 'restuarants/restuarants_list.html'
+    template_name = 'restuarants/form.html'
     success_url = '/restuarants/'
+
+    def form_valid(self, form):
+        instance = form.save(commit = False)
+        instance.owner = self.request.user
+        instance.save()
+        return super(RestuarantCreateView,self).form_valid(form)
 
