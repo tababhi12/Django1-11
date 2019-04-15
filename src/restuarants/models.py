@@ -4,6 +4,7 @@ import datetime as dt
 from .utils import unique_slug_generator
 from .validators import validate_category
 from django.conf import settings
+from django.urls import reverse
 
 # Create your models here.
 user = settings.AUTH_USER_MODEL
@@ -19,6 +20,10 @@ class RestuarantLocation(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse("restuarants:detail", kwargs={"slug": self.slug})
+    
 
     @property
     def title(self):

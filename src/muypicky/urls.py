@@ -14,20 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.conf.urls import url
+from django.urls import path,include
+from django.conf.urls import url,include
+from django.contrib.auth.views import LoginView
 #from restuarants.views import HomeView,AboutView
 from django.views.generic import TemplateView
-from restuarants.views import restuarant_list,RestuarantListView,RestuarantDetailView,RestuarantCreateView
+from restuarants.views import restuarant_list,RestuarantListView,RestuarantDetailView,RestuarantCreateView,restuarant_createview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^$', TemplateView.as_view(template_name = 'home.html')),
-    url('^about/$', TemplateView.as_view(template_name = 'about.html')),
-    url('^restuarants/$', RestuarantListView.as_view()),
-    url('^restuarants/create/$', RestuarantCreateView.as_view()),
-    url('^restuarants/(?P<slug>[\w-]+)/$', RestuarantDetailView.as_view()),
-    #url('^restuarants/(?P<rest_id>\w+)/$', RestuarantDetailView.as_view()),
-    #url('^restuarants/gastropub/$', GastropubListView.as_view()),
-    url('^contact/$', TemplateView.as_view(template_name = 'contact.html')),
+    url('^$', TemplateView.as_view(template_name = 'home.html'),name = 'home'),
+    url('^about/$', TemplateView.as_view(template_name = 'about.html'),name = 'about'),
+    url('^login/$', LoginView.as_view(),name = 'login'),
+    url('^items/', include(('menus.urls','menus'),namespace = 'menus')),
+    url('^restuarants/', include(('restuarants.urls','restuarants'),namespace = 'restuarants')),
+    url('^contact/$', TemplateView.as_view(template_name = 'contact.html'),name = 'contact'),
 ]

@@ -1,4 +1,6 @@
 from django.shortcuts import render,get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse,HttpResponseRedirect
 import random
@@ -9,13 +11,18 @@ from .forms import RestuarantCreateForm,RestuarantLocationCreateForm
 
 
 # Create your views here.
-
+@login_required(login_url='/login/')
 def restuarant_createview(request):
     form = RestuarantLocationCreateForm(request.POST or None)
     errors = None
     if form.is_valid():
-        form.save()
-        return HttpResponseRedirect('/restuarants/')
+        if request.user.is_authenticated():
+            instance = form.save(commit = False)
+            instance.owner = request.user
+            instance.save()
+            return HttpResponseRedirect('/restuarants/')
+        else:
+            return HttpResponseRedirect('/restuarants/')
     if form.errors:
         errors = form.errors
     return render(request, template_name='restuarants/form.html', context={'form':form,'errors':errors})
@@ -44,10 +51,11 @@ class RestuarantDetailView(DetailView):
     #     obj = get_object_or_404(RestuarantLocation,id = rest_id) #pk = rest_id
     #     return obj
 
-class RestuarantCreateView(CreateView):
+class RestuarantCreateView(LoginRequiredMixin,CreateView):
     form_class = RestuarantLocationCreateForm
-    template_name = 'restuarants/form.html'
-    success_url = '/restuarants/'
+    login_url = '/login/'
+    template_name = 'form.html'
+    #success_url = '/restuarants/'
 
     def form_valid(self, form):
         instance = form.save(commit = False)
@@ -55,3 +63,7 @@ class RestuarantCreateView(CreateView):
         instance.save()
         return super(RestuarantCreateView,self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context =  super(RestuarantCreateView,self).get_context_data(**kwargs)
+        context['title'] = 'Add Restuarant'
+        return context
