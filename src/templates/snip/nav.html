@@ -3,5 +3,8 @@
 <a href =  "{% url 'home' %}" >Home</a>
 <a href =  "{% url 'about' %}" >About</a>
 <a href =  "{% url 'contact' %}" >Contact</a>
-<a href =  "{% url 'restuarants:list' %}" >Restuarants</a>
-</div>
+{% if request.user.is_authenticated %}
+    <a href =  "{% url 'restuarants:list' %}" >Restuarants</a>
+    <a href =  "{% url 'menus:list' %}" >Menus</a>
+{% endif %}
+</div> 
