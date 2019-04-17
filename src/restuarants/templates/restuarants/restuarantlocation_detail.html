@@ -1,8 +1,0 @@
-{% extends 'base.html'%}
-{% block head_title%}Restuarant |{{block.super}}{% endblock head_title%}
-
-{% block content %}
-<h1>Restuarant list</h1>
-<h1>{{object.title}}</h1>
-<p>{{object.location}}<br/>{{object.category}}<br/>{{object.timestamp}},updated {{object.updated|timesince}}</p>
-{% endblock content %}
